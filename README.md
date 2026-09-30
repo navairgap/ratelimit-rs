@@ -26,3 +26,6 @@ Start with in-memory token bucket; Redis backend second. Property-based tests fr
 ## License
 
 MIT, see [LICENSE](LICENSE).
+
+---
+maintained · verified 2026-09-30
