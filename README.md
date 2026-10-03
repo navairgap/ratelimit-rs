@@ -29,3 +29,11 @@ MIT, see [LICENSE](LICENSE).
 
 ---
 maintained · verified 2026-09-30
+
+## Algorithms
+
+- **Token bucket** (default): smooth, allows small bursts.
+- **Sliding window**: strict, no bursts, more memory.
+- **GCRA**: burst-tolerant with a single counter per key.
+
+Pick with `Limiter::with_algorithm(...)`; all share the same trait.
