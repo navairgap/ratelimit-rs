@@ -37,3 +37,19 @@ maintained · verified 2026-09-30
 - **GCRA**: burst-tolerant with a single counter per key.
 
 Pick with `Limiter::with_algorithm(...)`; all share the same trait.
+
+## Usage
+
+```rust
+use ratelimit_rs::{Limiter, Algorithm};
+
+let limiter = Limiter::new(Algorithm::TokenBucket)
+    .capacity(100)
+    .refill_per_sec(20);
+
+if limiter.allow(&client_id) {
+    serve();
+} else {
+    reject_with_429();
+}
+```
