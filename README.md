@@ -65,3 +65,15 @@ single key, in-memory, Ryzen 7 (ballpark numbers, not guarantees):
 | GCRA | ~6M |
 
 profile on your hardware before trusting any of these.
+
+## Benchmarks
+
+single key, in-memory, Ryzen 7 (ballpark numbers, not guarantees):
+
+| algorithm | allows/sec |
+| --- | --- |
+| token bucket | ~8M |
+| sliding window | ~3M |
+| GCRA | ~6M |
+
+profile on your hardware before trusting any of these.
