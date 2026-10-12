@@ -77,3 +77,11 @@ single key, in-memory, Ryzen 7 (ballpark numbers, not guarantees):
 | GCRA | ~6M |
 
 profile on your hardware before trusting any of these.
+
+## Choosing an algorithm
+
+| need | pick |
+| --- | --- |
+| smooth with small bursts | token bucket |
+| strict fairness, no bursts | sliding window |
+| single counter per key | gcra |
