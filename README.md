@@ -89,3 +89,7 @@ profile on your hardware before trusting any of these.
 ## Performance
 
 the limiter shards keys across mutexes — hot keys never share a lock with cold ones. benchmark on your hardware; the table in the readme is a ballpark, not a contract.
+
+## Migrations
+
+0.1 → 0.2: no config changes, semver-compatible. the migration policy lives here: additive fields only until 1.0, deprecations announced one minor ahead.
