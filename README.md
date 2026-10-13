@@ -85,3 +85,7 @@ profile on your hardware before trusting any of these.
 | smooth with small bursts | token bucket |
 | strict fairness, no bursts | sliding window |
 | single counter per key | gcra |
+
+## Performance
+
+the limiter shards keys across mutexes — hot keys never share a lock with cold ones. benchmark on your hardware; the table in the readme is a ballpark, not a contract.
