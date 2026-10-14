@@ -93,3 +93,7 @@ the limiter shards keys across mutexes — hot keys never share a lock with cold
 ## Migrations
 
 0.1 → 0.2: no config changes, semver-compatible. the migration policy lives here: additive fields only until 1.0, deprecations announced one minor ahead.
+
+## Internals
+
+hot keys shard across 64 mutexes by hash — a hot key contends with 1/64th of the keyspace, not all of it. benchmarks on the readme reflect this; single-key throughput is bounded by one shard, which is the correct trade.
