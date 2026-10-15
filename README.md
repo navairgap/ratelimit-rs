@@ -97,3 +97,7 @@ the limiter shards keys across mutexes — hot keys never share a lock with cold
 ## Internals
 
 hot keys shard across 64 mutexes by hash — a hot key contends with 1/64th of the keyspace, not all of it. benchmarks on the readme reflect this; single-key throughput is bounded by one shard, which is the correct trade.
+
+## Releases
+
+semver from 0.1: additive fields are patch, new algorithms are minor, anything that changes allow() semantics is major. no exceptions, no emergencies.
