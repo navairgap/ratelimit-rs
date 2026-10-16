@@ -101,3 +101,7 @@ hot keys shard across 64 mutexes by hash — a hot key contends with 1/64th of t
 ## Releases
 
 semver from 0.1: additive fields are patch, new algorithms are minor, anything that changes allow() semantics is major. no exceptions, no emergencies.
+
+## Telemetry
+
+none. rate limiting decisions happen in-process; nothing is logged, phoned home, or aggregated. the benchmark numbers in the readme are run on the maintainer's machine, never collected from users.
