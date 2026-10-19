@@ -1,107 +1,44 @@
 # ratelimit-rs
 
-A rate-limiting middleware crate for Rust web services
+A planned rate-limiting library for Rust services.
 
-> 🚧 **Status: planning** — architecture and README first, code next.
+> **Status: design stage.** This repository currently contains documentation only; there is no published crate API or implementation yet.
 
-## Why
+## Goal
 
-Every real API needs rate limiting, and Rust's ecosystem deserves a clean, composable crate. Sliding window, token bucket, and fixed window — as tower/axum middleware with Redis or in-memory backends.
+Provide small, predictable rate-limit primitives that can be embedded in a service and tested independently of a web framework.
 
-## Planned features
+## Initial design
 
-- Token bucket, sliding window, fixed window algorithms
-- In-memory and Redis-backed stores
-- axum/tower middleware + a plain function API
-- Per-key limits (IP, user, API key) with custom quotas
+The first milestone should implement one in-memory algorithm before adding middleware or distributed storage. The API should make its time source injectable for deterministic tests and should document whether a rejected request consumes tokens.
 
-## Stack
+Potential algorithms, to be evaluated after the first implementation:
 
-`rust` `tokio` `redis` `axum`
+- **Token bucket:** allows bounded bursts while limiting the long-term rate.
+- **Fixed window:** simple and inexpensive, but permits bursts around window boundaries.
+- **Sliding window:** smoother enforcement with additional state.
 
-## Notes
+## Requirements for correctness
 
-Start with in-memory token bucket; Redis backend second. Property-based tests from day one.
+- Define behavior at exact refill and window boundaries.
+- Avoid panics for invalid configuration; return a clear error.
+- Use monotonic time for elapsed-time calculations.
+- Bound per-key state or document the eviction policy.
+- Explain that in-memory limits are per process and do not coordinate across replicas.
+- Add concurrency tests before advertising thread safety.
+
+## Planned milestones
+
+- [ ] Write down API semantics and configuration validation.
+- [ ] Implement a single-threaded token bucket with unit tests.
+- [ ] Add concurrency tests and benchmarks with reproducible commands.
+- [ ] Consider a Tower integration after the core API stabilizes.
+- [ ] Evaluate a distributed backend separately; do not imply cross-process guarantees for the in-memory mode.
+
+## Benchmarks
+
+No performance claims are made yet. Published numbers should include hardware, compiler version, workload, and reproducible commands.
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
-
----
-maintained · verified 2026-09-30
-
-## Algorithms
-
-- **Token bucket** (default): smooth, allows small bursts.
-- **Sliding window**: strict, no bursts, more memory.
-- **GCRA**: burst-tolerant with a single counter per key.
-
-Pick with `Limiter::with_algorithm(...)`; all share the same trait.
-
-## Usage
-
-```rust
-use ratelimit_rs::{Limiter, Algorithm};
-
-let limiter = Limiter::new(Algorithm::TokenBucket)
-    .capacity(100)
-    .refill_per_sec(20);
-
-if limiter.allow(&client_id) {
-    serve();
-} else {
-    reject_with_429();
-}
-```
-
-## Benchmarks
-
-single key, in-memory, Ryzen 7 (ballpark numbers, not guarantees):
-
-| algorithm | allows/sec |
-| --- | --- |
-| token bucket | ~8M |
-| sliding window | ~3M |
-| GCRA | ~6M |
-
-profile on your hardware before trusting any of these.
-
-## Benchmarks
-
-single key, in-memory, Ryzen 7 (ballpark numbers, not guarantees):
-
-| algorithm | allows/sec |
-| --- | --- |
-| token bucket | ~8M |
-| sliding window | ~3M |
-| GCRA | ~6M |
-
-profile on your hardware before trusting any of these.
-
-## Choosing an algorithm
-
-| need | pick |
-| --- | --- |
-| smooth with small bursts | token bucket |
-| strict fairness, no bursts | sliding window |
-| single counter per key | gcra |
-
-## Performance
-
-the limiter shards keys across mutexes — hot keys never share a lock with cold ones. benchmark on your hardware; the table in the readme is a ballpark, not a contract.
-
-## Migrations
-
-0.1 → 0.2: no config changes, semver-compatible. the migration policy lives here: additive fields only until 1.0, deprecations announced one minor ahead.
-
-## Internals
-
-hot keys shard across 64 mutexes by hash — a hot key contends with 1/64th of the keyspace, not all of it. benchmarks on the readme reflect this; single-key throughput is bounded by one shard, which is the correct trade.
-
-## Releases
-
-semver from 0.1: additive fields are patch, new algorithms are minor, anything that changes allow() semantics is major. no exceptions, no emergencies.
-
-## Telemetry
-
-none. rate limiting decisions happen in-process; nothing is logged, phoned home, or aggregated. the benchmark numbers in the readme are run on the maintainer's machine, never collected from users.
+MIT. See [LICENSE](LICENSE).
