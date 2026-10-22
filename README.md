@@ -42,3 +42,8 @@ No performance claims are made yet. Published numbers should include hardware, c
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+
+## Behavioral guarantees
+
+Use monotonic time and an injectable clock for deterministic tests. Document capacity-boundary behavior, token consumption on rejection, key cleanup, and invalid configuration. Exercise concurrent access so calls cannot exceed the configured allowance.
