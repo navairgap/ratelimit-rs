@@ -47,3 +47,8 @@ MIT. See [LICENSE](LICENSE).
 ## Behavioral guarantees
 
 Use monotonic time and an injectable clock for deterministic tests. Document capacity-boundary behavior, token consumption on rejection, key cleanup, and invalid configuration. Exercise concurrent access so calls cannot exceed the configured allowance.
+
+
+## Maintenance and verification notes
+
+Document rate limiter boundaries and invariants: monotonic time, injectable clock, concurrency safety, invalid configuration handling, and bounded per-key cleanup.
