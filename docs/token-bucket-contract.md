@@ -9,6 +9,10 @@ This document pins down the behavior a first in-memory token bucket should imple
 - Invalid configuration returns a typed error; it must not panic or silently clamp values.
 - Elapsed time uses a monotonic clock. The clock should be injectable in tests.
 
+## Time and retry hints
+
+Define attempt timing explicitly: the first request has attempt index 1, and a configured maximum-attempt count includes that initial request. Compute retry hints with a ceiling to the next whole time unit so a positive wait is never rounded down to zero. Accumulate fractional refill with integer remainder or another documented precision-preserving representation; avoid per-check rounding that creates or destroys tokens. Validate arithmetic before multiplication so extreme durations cannot overflow into a permissive limit.
+
 ## Request semantics
 
 1. Refill tokens according to elapsed monotonic time, capped at capacity.
