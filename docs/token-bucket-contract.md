@@ -22,6 +22,10 @@ Define attempt timing explicitly: the first request has attempt index 1, and a c
 
 Fractional refill should be accumulated rather than discarded on each check. A backward clock movement must not create tokens; monotonic time should make this impossible in production, while tests should cover defensive handling.
 
+## Per-key lifecycle
+
+If the API keeps a bucket per client key, document the maximum number of tracked keys and the expiration policy for inactive keys. Enforce the cap before inserting new state, and make eviction behavior deterministic enough to test. Never evict an active bucket silently in a way that grants a fresh burst to an already rate-limited key. Treat client keys as opaque identifiers and avoid logging raw tokens or credentials as keys.
+
 ## Concurrency and scope
 
 The first implementation may be single-threaded if that limitation is explicit. If synchronization is added, document the lock scope and add concurrent stress tests. An in-memory bucket is per process and does not coordinate limits across replicas.
