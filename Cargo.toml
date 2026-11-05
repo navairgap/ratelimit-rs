@@ -1,0 +1,13 @@
+[package]
+name = "ratelimit-rs"
+version = "0.1.0"
+edition = "2021"
+description = "Small in-memory token-bucket rate limiter"
+license = "MIT"
+readme = "README.md"
+
+[lib]
+name = "ratelimit_rs"
+path = "src/lib.rs"
+
+[dependencies]
